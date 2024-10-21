@@ -188,7 +188,7 @@ vim.keymap.set('n', '<leader>man', function()
 end, { desc = 'Open kickstarter.nvim docs' })
 
 vim.keymap.set('n', '<leader>work', function()
-  vim.cmd 'e ~/workspace/github.com/vigneshsekar314'
+  vim.cmd 'e D:/workspace/github.com/vigneshsekar314'
 end, { desc = 'Open workspace folder' })
 
 -- vim.keymap.set('n', '<leader>pv', function()
