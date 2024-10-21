@@ -181,9 +181,19 @@ vim.keymap.set('n', '<leader>bgy', function()
   vim.cmd 'colorscheme desert'
 end, { desc = 'Set the theme to desert' })
 
+-- custom region to fill with repo shortcuts
+
 vim.keymap.set('n', '<leader>man', function()
   vim.cmd 'e $MYVIMRC'
 end, { desc = 'Open kickstarter.nvim docs' })
+
+vim.keymap.set('n', '<leader>work', function()
+  vim.cmd 'e ~/workspace/github.com/vigneshsekar314'
+end, { desc = 'Open workspace folder' })
+
+-- vim.keymap.set('n', '<leader>pv', function()
+-- vim.cmd 'Ex'
+-- end, { desc = 'Open file explorer' })
 
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
@@ -951,7 +961,7 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
