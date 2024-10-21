@@ -166,7 +166,7 @@ vim.keymap.set('i', 'jk', '<Esc>')
 
 vim.keymap.set('n', '<leader>tth', function()
   vim.cmd 'Telescope colorscheme'
-end)
+end, { desc = 'Select theme' })
 
 vim.keymap.set('n', '<leader>bgn', function()
   vim.cmd [[
