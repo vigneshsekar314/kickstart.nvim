@@ -79,6 +79,8 @@ vim.opt.scrolloff = 10
 vim.keymap.set('i', 'jk', '<Esc>')
 vim.keymap.set('n', '<leader>g', '<cmd>cnext<CR>')
 vim.keymap.set('n', '<leader>h', '<cmd>cprev<CR>')
+vim.keymap.set('n', '<A-q>', '<cmd>cclose<CR>')
+vim.keymap.set('n', '<A-o>', '<cmd>copen<CR>')
 
 -- for saving text in normal mode and insert mode using CTRL + S
 vim.keymap.set('i', '<C-s>', '<cmd>w<CR>')
@@ -116,11 +118,15 @@ if vim.g.neovide then
   end
   vim.keymap.set({ 'n', 'v', 'o' }, '<A-]>', function()
     -- change_transparency(0.1)
-    change_opacity(0.2)
+    if vim.g.neovide_opacity < 1 then
+      change_opacity(0.2)
+    end
   end)
   vim.keymap.set({ 'n', 'v', 'o' }, '<A-[>', function()
     -- change_transparency(-0.1)
-    change_opacity(-0.2)
+    if vim.g.neovide_opacity > 0 then
+      change_opacity(-0.2)
+    end
   end)
 
   vim.keymap.set({ 'n', 'v' }, '<F11>', function()
@@ -131,6 +137,13 @@ if vim.g.neovide then
     end
   end)
 end
+
+-- Set the current open file path to neovim
+vim.keymap.set('n', '<leader>cwd', function()
+  local sep = '\\' -- this is for windows, for linux use /
+  local buf_path = 'cd ' .. vim.api.nvim_buf_get_name(0):match('.*' .. sep)
+  vim.cmd(buf_path)
+end, { desc = 'set current working directory to path of current buffer' })
 
 vim.keymap.set('n', '<leader>tth', function()
   vim.cmd 'Telescope colorscheme'
@@ -146,8 +159,8 @@ highlight NonText ctermbg=none
 end, { desc = 'Set the background transparent' })
 
 vim.keymap.set('n', '<leader>bgy', function()
-  vim.cmd 'colorscheme retrobox'
-end, { desc = 'Set the theme to retrobox' })
+  vim.cmd 'colorscheme catppuccin-mocha'
+end, { desc = 'Set the theme to catppuccin-mocha' })
 
 vim.keymap.set('n', '<tab>', '<cmd>bnext<CR>', { desc = 'move to next buffer' })
 
@@ -266,6 +279,90 @@ require('lazy').setup({
       },
     },
   },
+  {
+    'nvzone/typr',
+    dependencies = 'nvzone/volt',
+    opts = {},
+    cmd = { 'Typr', 'TyprStats' },
+  },
+  {
+    'm4xshen/hardtime.nvim',
+    lazy = false,
+    dependencies = { 'MunifTanjim/nui.nvim' },
+    opts = {},
+  },
+  {
+    'ThePrimeagen/harpoon',
+    branch = 'harpoon2',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      --harpoon basic setup
+      local harpoon = require 'harpoon'
+
+      -- REQUIRED
+      harpoon:setup()
+      -- REQUIRED
+
+      vim.keymap.set('n', '<leader>a', function()
+        harpoon:list():add()
+      end)
+      vim.keymap.set('n', '<C-e>', function()
+        harpoon.ui:toggle_quick_menu(harpoon:list())
+      end)
+
+      vim.keymap.set('n', '<C-1>', function()
+        harpoon:list():select(1)
+      end)
+      vim.keymap.set('n', '<C-2>', function()
+        harpoon:list():select(2)
+      end)
+      vim.keymap.set('n', '<C-3>', function()
+        harpoon:list():select(3)
+      end)
+      vim.keymap.set('n', '<C-4>', function()
+        harpoon:list():select(4)
+      end)
+      vim.keymap.set('n', '<C-5>', function()
+        harpoon:list():select(5)
+      end)
+      vim.keymap.set('n', '<C-6>', function()
+        harpoon:list():select(6)
+      end)
+      vim.keymap.set('n', '<C-7>', function()
+        harpoon:list():select(7)
+      end)
+      vim.keymap.set('n', '<C-8>', function()
+        harpoon:list():select(8)
+      end)
+      vim.keymap.set('n', '<C-9>', function()
+        harpoon:list():select(9)
+      end)
+
+      -- Toggle previous & next buffers stored within Harpoon list
+      vim.keymap.set('n', '<C-S-P>', function()
+        harpoon:list():prev()
+      end)
+      vim.keymap.set('n', '<C-S-N>', function()
+        harpoon:list():next()
+      end)
+    end,
+  },
+  -- {
+  --   "LintaoAmons/bookmarks.nvim",
+  --   -- pin the plugin at specific version for stability
+  --   -- backup your bookmark sqlite db when there are breaking changes
+  --   tag = "3.0.0",
+  --   dependencies = {
+  --     {"kkharji/sqlite.lua"},
+  --     {"nvim-telescope/telescope.nvim"},  -- currently has only telescopes supported, but PRs for other pickers are welcome
+  --     {"stevearc/dressing.nvim"}, -- optional: better UI
+  --     {"GeorgesAlkhouri/nvim-aider"} -- optional: for Aider integration
+  --   },
+  --   config = function()
+  --     local opts = {} -- check the "./lua/bookmarks/default-config.lua" file for all the options
+  --     require("bookmarks").setup(opts) -- you must call setup to init sqlite db
+  --   end,
+  -- },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -462,6 +559,10 @@ require('lazy').setup({
     },
   },
   { 'Bilal2453/luvit-meta', lazy = true },
+  -- custom installed themes
+  { 'webhooked/kanso.nvim', lazy = false, priority = 1000 },
+  { 'catppuccin/nvim', name = 'catppuccin', priority = 1000 },
+  { 'rose-pine/neovim', name = 'rose-pine', priority = 1000 },
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
@@ -619,7 +720,7 @@ require('lazy').setup({
         -- clangd = {},
         -- gopls = {},
         pyright = {},
-        -- rust_analyzer = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -711,7 +812,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
+        python = { 'isort', 'black' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -847,7 +948,7 @@ require('lazy').setup({
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       -- vim.cmd.colorscheme 'tokyonight-night'
-      vim.cmd.colorscheme 'retrobox'
+      vim.cmd.colorscheme 'catppuccin-mocha'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
