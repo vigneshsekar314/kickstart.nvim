@@ -102,7 +102,7 @@ vim.g.have_nerd_font = true
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -171,39 +171,7 @@ vim.o.confirm = true
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
-vim.keymap.set('i', 'jk', '<Esc>')
-
-vim.keymap.set('n', '<leader>tth', function()
-  vim.cmd 'Telescope colorscheme'
-end, { desc = 'Select theme' })
-
-vim.keymap.set('n', '<leader>bgn', function()
-  vim.cmd [[
- highlight Normal guibg=none
-highlight NonText guibg=none
-highlight Normal ctermbg=none
-highlight NonText ctermbg=none
-]]
-end, { desc = 'Set the background transparent' })
-
-vim.keymap.set('n', '<leader>bgy', function()
-  vim.cmd 'colorscheme desert'
-end, { desc = 'Set the theme to desert' })
-
--- custom region to fill with repo shortcuts
-
-vim.keymap.set('n', '<leader>man', function()
-  vim.cmd 'e $MYVIMRC'
-end, { desc = 'Open kickstarter.nvim docs' })
-
-vim.keymap.set('n', '<leader>work', function()
-  vim.cmd 'e ~/workspace/github.com/vigneshsekar314'
-end, { desc = 'Open workspace folder' })
-
--- vim.keymap.set('n', '<leader>pv', function()
--- vim.cmd 'Ex'
--- end, { desc = 'Open file explorer' })
-
+vim.keymap.set('i', 'jk', '<Esc>', { desc = 'shortcut for switching to normal mode from insert mode' })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
@@ -220,6 +188,8 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
 -- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
+-- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
+-- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -438,12 +408,41 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
+        defaults = {
+          file_ignore_patterns = {
+            '%.git/',
+            'node_modules/',
+            'build/',
+            'dist/',
+            'target/',
+            '__pycache__/',
+            '%.pyc',
+            '%.pyo',
+            '%.egg%-info/',
+            '.venv/',
+            'venv/',
+            '.pytest_cache/',
+            '.coverage',
+            'CMakeFiles/',
+            'cmake%-build%-*/',
+          },
+        },
         -- defaults = {
         --   mappings = {
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        -- pickers = {}
+        pickers = {
+          find_files = {
+            hidden = false, -- Don't show hidden files by default
+            -- You can also add picker-specific ignore patterns here
+          },
+          live_grep = {
+            additional_args = function(opts)
+              return { '--hidden', '--glob', '!.git/*', '--glob', '!build/*' }
+            end,
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -704,8 +703,20 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {},
-        -- rust_analyzer = {},
+        pyright = {
+          capabilities = capabilities,
+          on_attach = on_attach,
+          offset_encoding = 'utf-16',
+          settings = {
+            python = {
+              analysis = {
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
+        },
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -759,6 +770,7 @@ require('lazy').setup({
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for ts_ls)
+            server.offset_encoding = server.offset_encoding or 'utf-16'
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
           end,
@@ -925,11 +937,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      -- vim.cmd.colorscheme 'tokyonight-night'
-      vim.cmd.colorscheme 'desert'
-
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
+      vim.cmd.colorscheme 'tokyonight-night'
     end,
   },
 
