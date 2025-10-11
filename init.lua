@@ -16,11 +16,8 @@ vim.g.have_nerd_font = true
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
-<<<<<<< HEAD
 vim.opt.relativenumber = true
-=======
 -- vim.o.relativenumber = true
->>>>>>> 2eba9cff14bdcd003657fc5f6640b1e10805885f
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -37,13 +34,10 @@ vim.schedule(function()
 end)
 
 -- Enable break indent
-<<<<<<< HEAD
 vim.opt.wrap = true
 vim.opt.breakindent = true
 vim.opt.showbreak = '↪'
-=======
 vim.o.breakindent = true
->>>>>>> 2eba9cff14bdcd003657fc5f6640b1e10805885f
 
 -- Save undo history
 vim.o.undofile = true
@@ -73,10 +67,8 @@ vim.o.splitbelow = true
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`
 --  and `:help 'listchars'`
-<<<<<<< HEAD
 -- vim.opt.list = true
 -- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
-=======
 --
 --  Notice listchars is set using `vim.opt` instead of `vim.o`.
 --  It is very similar to `vim.o` but offers an interface for conveniently interacting with tables.
@@ -84,7 +76,6 @@ vim.o.splitbelow = true
 --   and `:help lua-options-guide`
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
->>>>>>> 2eba9cff14bdcd003657fc5f6640b1e10805885f
 
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
@@ -215,12 +206,9 @@ rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-<<<<<<< HEAD
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'tpope/vim-commentary',
-=======
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
->>>>>>> 2eba9cff14bdcd003657fc5f6640b1e10805885f
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
