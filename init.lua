@@ -33,10 +33,17 @@ vim.schedule(function()
 end)
 
 -- Enable break indent
+vim.opt.wrap = true
 vim.opt.breakindent = true
+vim.opt.showbreak = '↪'
 
 -- Save undo history
 vim.opt.undofile = true
+
+-- set indent length for functions and tab spaces
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
@@ -59,8 +66,8 @@ vim.opt.splitbelow = true
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`
 --  and `:help 'listchars'`
-vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+-- vim.opt.list = true
+-- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
@@ -273,7 +280,12 @@ require('lazy').setup({
       },
     },
   },
-
+  -- {
+  --   'm4xshen/hardtime.nvim',
+  --   lazy = false,
+  --   dependencies = { 'MunifTanjim/nui.nvim' },
+  --   opts = {},
+  -- },
   -- NOTE: Plugins can specify dependencies.
   --
   -- The dependencies are proper plugin specifications as well - anything
@@ -296,6 +308,11 @@ require('lazy').setup({
 
         -- `cond` is a condition used to determine whether this plugin should be
         -- installed and loaded.
+        defaults = {
+          file_ignore_patterns = {
+            'node_modules',
+          },
+        },
         cond = function()
           return vim.fn.executable 'make' == 1
         end,
@@ -555,7 +572,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
+        gopls = {},
         pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -785,11 +802,19 @@ require('lazy').setup({
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       -- vim.cmd.colorscheme 'tokyonight-night'
-      vim.cmd.colorscheme 'evening'
+      vim.cmd.colorscheme 'tokyonight-moon'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
+  },
+  {
+    'catppuccin/nvim',
+    name = 'catppuccin',
+    priority = 1000,
+    -- init = function()
+    --   vim.cmd.colorscheme = 'catppuccin-frappe'
+    -- end,
   },
 
   -- Highlight todo, notes, etc in comments
