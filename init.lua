@@ -105,18 +105,18 @@ end, { desc = 'Select theme' })
 vim.keymap.set('n', '<tab>', '<cmd>bnext<CR>', { desc = 'go to next buffer' })
 vim.keymap.set('n', '<S-tab>', '<cmd>bprev<CR>', { desc = 'go to previous buffer' })
 
-vim.keymap.set('n', '<leader>bgn', function()
-  vim.cmd [[
- highlight Normal guibg=none
-highlight NonText guibg=none
-highlight Normal ctermbg=none
-highlight NonText ctermbg=none
-]]
-end, { desc = 'Set the background transparent' })
+-- vim.keymap.set('n', '<leader>bgn', function()
+--   vim.cmd [[
+--  highlight Normal guibg=none
+-- highlight NonText guibg=none
+-- highlight Normal ctermbg=none
+-- highlight NonText ctermbg=none
+-- ]]
+-- end, { desc = 'Set the background transparent' })
 
-vim.keymap.set('n', '<leader>bgy', function()
-  vim.cmd 'colorscheme evening'
-end, { desc = 'Set the theme to evening' })
+-- vim.keymap.set('n', '<leader>bgy', function()
+--   vim.cmd 'colorscheme evening'
+-- end, { desc = 'Set the theme to evening' })
 
 -- custom region to fill with repo shortcuts
 
@@ -846,6 +846,54 @@ require('lazy').setup({
       signature = { enabled = true },
     },
   },
+  {
+    'NickvanDyke/opencode.nvim',
+    dependencies = {
+      -- Recommended for `ask()` and `select()`.
+      -- Required for `toggle()`.
+      { 'folke/snacks.nvim', opts = { input = {}, picker = {} } },
+    },
+    config = function()
+      vim.g.opencode_opts = {
+        -- Your configuration, if any — see `lua/opencode/config.lua`, or "goto definition" on `opencode_opts`.
+      }
+
+      -- Required for `vim.g.opencode_opts.auto_reload`.
+      vim.o.autoread = true
+
+      -- Recommended/example keymaps.
+      vim.keymap.set({ 'n', 'x' }, '<leader>oa', function()
+        require('opencode').ask('@this: ', { submit = true })
+      end, { desc = 'Ask about this' })
+      vim.keymap.set({ 'n', 'x' }, '<leader>os', function()
+        require('opencode').select()
+      end, { desc = 'Select prompt' })
+      vim.keymap.set({ 'n', 'x' }, '<leader>o+', function()
+        require('opencode').prompt '@this'
+      end, { desc = 'Add this' })
+      vim.keymap.set('n', '<leader>ot', function()
+        require('opencode').toggle()
+      end, { desc = 'Toggle embedded' })
+      vim.keymap.set('n', '<leader>oc', function()
+        require('opencode').command()
+      end, { desc = 'Select command' })
+      vim.keymap.set('n', '<leader>on', function()
+        require('opencode').command 'session_new'
+      end, { desc = 'New session' })
+      vim.keymap.set('n', '<leader>oi', function()
+        require('opencode').command 'session_interrupt'
+      end, { desc = 'Interrupt session' })
+      vim.keymap.set('n', '<leader>oA', function()
+        require('opencode').command 'agent_cycle'
+      end, { desc = 'Cycle selected agent' })
+      vim.keymap.set('n', '<S-C-u>', function()
+        require('opencode').command 'messages_half_page_up'
+      end, { desc = 'Messages half page up' })
+      vim.keymap.set('n', '<S-C-d>', function()
+        require('opencode').command 'messages_half_page_down'
+      end, { desc = 'Messages half page down' })
+    end,
+  },
 
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
@@ -866,7 +914,7 @@ require('lazy').setup({
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       -- vim.cmd.colorscheme 'tokyonight-night'
-      vim.cmd.colorscheme 'tokyonight-moon'
+      -- vim.cmd.colorscheme 'tokyonight-moon'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
@@ -880,6 +928,16 @@ require('lazy').setup({
     --   vim.cmd.colorscheme = 'catppuccin-frappe'
     -- end,
   },
+  {
+    'bjarneo/ash.nvim',
+    name = 'ash',
+  },
+  {
+    'tahayvr/matteblack.nvim',
+    -- lazy = false,
+    -- priority = 1000,
+  },
+  { 'rebelot/kanagawa.nvim' },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
