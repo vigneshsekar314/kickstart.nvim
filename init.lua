@@ -115,7 +115,7 @@ vim.keymap.set('n', '<S-tab>', '<cmd>bprev<CR>', { desc = 'go to previous buffer
 -- end, { desc = 'Set the background transparent' })
 
 -- vim.keymap.set('n', '<leader>bgy', function()
---   vim.cmd 'colorscheme evening'
+-- vim.cmd 'colorscheme evening'
 -- end, { desc = 'Set the theme to evening' })
 
 -- custom region to fill with repo shortcuts
@@ -924,9 +924,9 @@ require('lazy').setup({
     'catppuccin/nvim',
     name = 'catppuccin',
     priority = 1000,
-    -- init = function()
-    --   vim.cmd.colorscheme = 'catppuccin-frappe'
-    -- end,
+    init = function()
+      vim.cmd.colorscheme 'catppuccin-macchiato'
+    end,
   },
   {
     'bjarneo/ash.nvim',
